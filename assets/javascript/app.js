@@ -1,6 +1,3 @@
-// PSEUDOCODE
-// change so timer is for overall game??? not per question
-
 $(document).ready(function () {
 // write variable for each question, runs through the game
 // assign an answer for each question
@@ -59,7 +56,7 @@ var correctCount = 0;
 var wrongCount = 0;
 var unanswerCount = 0;
 // enabled per question
-var timer = 30;
+var timer = 10;
 var intervalId;
 // determined by user
 var userGuess = "";
@@ -84,7 +81,7 @@ $("#start").on("click", function () {
 }
     })
 
-// make the timer run for 30 seconds (per question...is ok?)
+// make the timer run for 10 seconds (per question...is ok?)
 // automatically renews
 function runTimer(){
     if (!running) {
@@ -98,6 +95,8 @@ function runTimer(){
 function decrement() {
     $("#timeLeft").html("<h3>Time remaining: " + timer + "</h3>");
     timer --;
+    $("#answerBox").html("<p>Time is up! The correct answer is: " + pick.choice[pick.answer] + "</p>");
+    hidepicture();
 
     // timer stops once reaches 0
     if (timer === 0) {
@@ -160,7 +159,7 @@ function hidepicture () {
 
     var hidpic = setTimeout(function() {
         $("#answerBox").empty();
-        timer= 30;
+        timer= 10;
 
     // once game finishes, tally number of correct, incorrent & unanswered questions
     if ((wrongCount + correctCount + unanswerCount) === questionCount) {
