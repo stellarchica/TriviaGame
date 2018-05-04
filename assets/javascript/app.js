@@ -1,84 +1,72 @@
-// DIRECTIONS
-// You"ll create a trivia form with multiple choice or true/false options (your choice)
-// The player will have a limited amount of time to finish the quiz.
-// The game ends when the time runs out.
-// The page will reveal number of questions that players answer correctly & incorrectly
-// Don"t let the player pick more than one answer per question.
-// Don"t forget to include a countdown timer.
-
-
 // PSEUDOCODE
-// have landing page (in HTML)
-// will create on click for user to start the Game
-
-// change so timer is for overall game, not per question
-// once timer finishes, page will automatically tally number of correct, incorrent & unanswered questions
+// change so timer is for overall game??? not per question
 
 $(document).ready(function () {
 // write variable for each question, runs through the game
 // assign an answer for each question
-// replace GIFs
     var options = [
     {
         question: "What led to Stanley famously asking Michael: 'Did I stutter?'", 
         choice: ["Michael stole his lunch.", "Michael wouldn't leave him alone during a meeting.", "Michael invited himself over for dinner.", "Michael made him lose a big client."],
         answer: 1,
-        photo: "assets/images/pupusas.jpg"
+        photo: "assets/images/stutter.gif"
         },
         {
-        
         question: "What kitchen item does Stanley have two of after Pam & Roy call off their wedding?", 
         choice: ["Slow-cooker", "Blender", "Toaster", "Microwave"],
         answer: 2,
-        photo: "assets/images/mtdew.gif"
+        photo: "assets/images/toasters.gif"
         }, 
         {
-        
         question: "After his heart attack, Stanley gets a nurse who he later has an affair with. What's her name?", 
         choice: ["Claudia", "Cassie", "Cynthia", "Courtney" ],
         answer: 2,
-        photo: "assets/images/coffee.gif"
+        photo: "assets/images/affairs.gif"
     }, 
     {
         question: "What condition does Stanley have?", 
         choice: ["High blood pressure", "Iron deficiency", "Asthma", "Diabetes" ],
         answer: 3,
-        photo: "assets/images/harvey.jpg"
+        photo: "assets/images/insulin.gif"
     }, 
     {
         question: "What is Stanley's hobby after he retires?", 
         choice: ["Painting caricatures", "Carving wooden birds", "Playing saxophone", "Gardening alongside at-risk youth" ],
         answer: 1,
-        photo: "assets/images/dozen.jpg"
+        photo: "assets/images/powerwalk.gif"
     }, 
     {
         question: "How much money does Stanley offer Dwight to never speak to him again?", 
         choice: ["Ten thousand Schrute bucks", "A million Stanley nickels", "A hundred Schrute dimes", "Half a million Stanley pennies" ],
         answer: 1,
-        photo: "assets/images/herring.jpg"
+        photo: "assets/images/sass.gif"
     }, 
     {
         question: "Does Stanley have mustache?", 
         choice: ["Yes.", "No.", "Only in the winter.", "It's a goatee." ],
         answer: 0,
-        photo: "assets/images/lemon.gif"
+        photo: "assets/images/nod.gif"
     }, 
     {
         question: "When the Dunder Mifflin employees go to trivia night Philadelphia, what team is Stanley is on?", 
         choice: ["A-team", "B-team/Backups", "Just for fun/The Einsteins", "He doesn't go." ],
         answer: 1,
-        photo: "assets/images/guava.gif"
+        photo: "assets/images/blink.gif"
     }];
 
+// displays count at the end of the game
 var correctCount = 0;
 var wrongCount = 0;
 var unanswerCount = 0;
+// enabled per question
 var timer = 30;
 var intervalId;
+// determined by user
 var userGuess = "";
 var running = false;
+// selector
 var questionCount = options.length;
-var pick;
+var selected;
 var index;
 var newArray = [];
 var holder = [];
@@ -86,7 +74,7 @@ var holder = [];
 
 
 $("#reset").hide();
-// start button begins the game
+// on click for user to start the Game
 $("#start").on("click", function () {
         $("#start").hide();
         displayQuestion();
@@ -96,7 +84,7 @@ $("#start").on("click", function () {
 }
     })
 
-// make the timer run for 30 seconds (per question?)
+// make the timer run for 30 seconds (per question...is ok?)
 // automatically renews
 function runTimer(){
     if (!running) {
@@ -108,15 +96,13 @@ function runTimer(){
 // timer capability to run
 // begins after click (decreases in increment of one second)
 function decrement() {
-    $("#timeleft").html("<h3>Time remaining: " + timer + "</h3>");
+    $("#timeLeft").html("<h3>Time remaining: " + timer + "</h3>");
     timer --;
 
     // timer stops once reaches 0
     if (timer === 0) {
         unanswerCount++;
         stop();
-        // $("#answerblock").html("<p>Time is up! The correct answer is: " + pick.choice[pick.answer] + "</p>");
-        // hidepicture();
     }	
 }
 
@@ -127,20 +113,20 @@ function stop() {
 }
 // picks question from array
 // displays question and answer choices
-function displayQuestion() {
+function displayQuestion(){
     // generate random index in array, depending on question
     index = Math.floor(Math.random()*options.length);
-    pick = options[index];
+    selected = options[index];
 
     //  run through answer array and display
-        $("#questionblock").html("<h2>" + pick.question + "</h2>");
-        for(var i = 0; i < pick.choice.length; i++) {
+        $("#questionBox").html("<h2>" + selected.question + "</h2>");
+        for(var i = 0; i < selected.choice.length; i++) {
             var userChoice = $("<div>");
             userChoice.addClass("answerchoice");
-            userChoice.html(pick.choice[i]);
+            userChoice.html(selected.choice[i]);
             // assign array position to it so can check answer
             userChoice.attr("data-guessvalue", i);
-            $("#answerblock").append(userChoice);
+            $("#answerBox").append(userChoice);
 }
 
 
@@ -150,40 +136,39 @@ $(".answerchoice").on("click", function () {
     userGuess = parseInt($(this).attr("data-guessvalue"));
 
     //correct guess or wrong guess outcomes
-    if (userGuess === pick.answer) {
+    if (userGuess === selected.answer) {
         stop();
         correctCount++;
         userGuess="";
-        $("#answerblock").html("<p>You got it!</p>");
+        $("#answerBox").html("<p>You got it!</p>");
         hidepicture();
 
     } else {
         stop();
         wrongCount++;
         userGuess="";
-        $("#answerblock").html("<p>So close! The correct answer is: " + pick.choice[pick.answer] + "</p>");
+        $("#answerBox").html("<p>So close! The correct answer is: " + selected.choice[selected.answer] + "</p>");
         hidepicture();
     }
 })
 }
 
-
 function hidepicture () {
-    $("#answerblock").append("<img src=" + pick.photo + ">");
-    newArray.push(pick);
+    $("#answerBox").append("<img src=" + selected.photo + ">");
+    newArray.push(selected);
     options.splice(index,1);
 
     var hidpic = setTimeout(function() {
-        $("#answerblock").empty();
+        $("#answerBox").empty();
         timer= 30;
 
-    // display performance tally
+    // once game finishes, tally number of correct, incorrent & unanswered questions
     if ((wrongCount + correctCount + unanswerCount) === questionCount) {
-        $("#questionblock").empty();
-        $("#questionblock").html("<h3>Game Over! Here are your results: </h3>");
-        $("#answerblock").append("<h4> Correct: " + correctCount + "</h4>" );
-        $("#answerblock").append("<h4> Incorrect: " + wrongCount + "</h4>" );
-        $("#answerblock").append("<h4> Unanswered: " + unanswerCount + "</h4>" );
+        $("#questionBox").empty();
+        $("#questionBox").html("<h3>Game Over! Here are your results: </h3>");
+        $("#answerBox").append("<h4> Correct: " + correctCount + "</h4>" );
+        $("#answerBox").append("<h4> Incorrect: " + wrongCount + "</h4>" );
+        $("#answerBox").append("<h4> Unanswered: " + unanswerCount + "</h4>" );
         $("#reset").show();
         correctCount = 0;
         wrongCount = 0;
@@ -194,15 +179,16 @@ function hidepicture () {
         displayQuestion();
 
     }
-    }, 3000);
+    // time displayed after question answered
+    }, 6000);
 
 
 }
 
 $("#reset").on("click", function() {
     $("#reset").hide();
-    $("#answerblock").empty();
-    $("#questionblock").empty();
+    $("#answerBox").empty();
+    $("#questionBox").empty();
     for(var i = 0; i < holder.length; i++) {
         options.push(holder[i]);
     }
