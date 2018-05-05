@@ -82,6 +82,7 @@ $("#start").on("click", function () {
     })
 
 // make the timer run for 10 seconds (per question...is ok?)
+// broken timer :/
 // automatically renews
 function runTimer(){
     if (!running) {
